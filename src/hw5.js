@@ -16,9 +16,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
-// =================
-// GAME STATE VARIABLES
-// =================
+// Game state variables
 const gameState = {
   score: 0,
   shotAttempts: 0,
@@ -43,9 +41,9 @@ const gameState = {
 // Physics constants
 const PHYSICS = {
   gravity: -9.8,
-  ballRadius: 0.15, // Increased basketball size for better visibility (was 0.119)
+  ballRadius: 0.15,
   bounceEnergyLoss: 0.7,
-  groundLevel: 0.15, // Ball radius above ground
+  groundLevel: 0.15,
   courtBounds: {
     minX: -13.5, // 28m court: -14 to +14, with 0.5m buffer
     maxX: 13.5,
@@ -54,7 +52,7 @@ const PHYSICS = {
   },
   rimHeight: 3.05, // Standard basketball hoop height: 10 feet (3.05 meters)
   rimRadius: 0.45,
-  shootingSpeed: 25 // Increased shooting power for more powerful throws (was 15)
+  shootingSpeed: 25 // speed of the ball
 };
 
 // Court setup - Standard basketball court: 28m x 15m
@@ -172,9 +170,7 @@ function createKeyArea(side) {
 createKeyArea(-1);
 createKeyArea(1);
 
-// =================
-// BASKETBALL CREATION WITH PHYSICS
-// =================
+// Basketball creation
 function createBasketball() {
   const BALL_RADIUS = PHYSICS.ballRadius;
   const ballGeometry = new THREE.SphereGeometry(BALL_RADIUS, 32, 32);
@@ -221,9 +217,7 @@ function createBasketball() {
 
 const basketball = createBasketball();
 
-// =================
-// BASKETBALL HOOPS WITH COLLISION DATA
-// =================
+// Basketball hoops
 function createBasketballHoop(side) {
   const hoopGroup = new THREE.Group();
   
@@ -306,9 +300,7 @@ function createBasketballHoop(side) {
 createBasketballHoop(-1);
 createBasketballHoop(1);
 
-// =================
-// PHYSICS SYSTEM
-// =================
+// Physics system
 function updatePhysics(deltaTime) {
   if (!gameState.isInFlight) return;
   
@@ -366,7 +358,6 @@ function updatePhysics(deltaTime) {
 }
 
 function checkScoring() {
-  // Prevent multiple scoring for the same shot
   if (gameState.lastShotResult === 'made') return;
   
   for (const hoop of gameState.hoops) {
@@ -405,9 +396,7 @@ function missShot() {
   showShotFeedback('MISSED SHOT', '#f44336');
 }
 
-// =================
-// BALL MOVEMENT CONTROLS (Camera-Relative)
-// =================
+// Ball movement controls
 function updateBallMovement(deltaTime) {
   if (gameState.isInFlight) return;
   
@@ -422,7 +411,6 @@ function updateBallMovement(deltaTime) {
   const cameraRight = new THREE.Vector3();
   cameraRight.crossVectors(cameraDirection, camera.up).normalize();
   
-  // Calculate forward vector (project camera direction onto horizontal plane)
   const cameraForward = new THREE.Vector3(cameraDirection.x, 0, cameraDirection.z).normalize();
   
   // Movement relative to camera
@@ -471,9 +459,7 @@ function updateBallMovement(deltaTime) {
   ball.position.copy(gameState.ballPosition);
 }
 
-// =================
-// SHOOTING MECHANICS
-// =================
+// Shooting mechanics
 function shootBasketball() {
   if (gameState.isInFlight) return;
   
@@ -539,9 +525,7 @@ function resetBall() {
   updateUI();
 }
 
-// =================
-// UI SYSTEM
-// =================
+// UI system
 function updateUI() {
   const scoreElement = document.querySelector('.score-display');
   if (scoreElement) {
@@ -612,9 +596,7 @@ function showShotFeedback(message, color) {
   }, 2000);
 }
 
-// =================
-// CONTROLS SYSTEM
-// =================
+// Controls system
 // Handle keyboard down events
 document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
@@ -660,7 +642,7 @@ document.addEventListener('keydown', (event) => {
     case 'o':
       orbitEnabled = !orbitEnabled;
       controls.enabled = orbitEnabled;
-      updateUI(); // Update UI to show orbit status
+      updateUI();
       break;
     case '1':
       setCameraPreset('default');
@@ -712,14 +694,13 @@ controls.minDistance = 5;
 controls.maxDistance = 50;
 controls.maxPolarAngle = Math.PI * 0.5;
 
-// Camera presets - function to get dynamic side views
+// Camera presets
 function getCameraPresets(side = currentSide) {
-  console.log(`Getting camera presets for side: ${side}`); // Debug log
   return {
     default: { position: new THREE.Vector3(0, 15, 25), target: new THREE.Vector3(0, 0, 0) },
-    side: { position: new THREE.Vector3(side * 23, 8, 0), target: new THREE.Vector3(0, 0, 0) }, // Alternates sides
-    corner: { position: new THREE.Vector3(side * 18, 10, 18), target: new THREE.Vector3(0, 0, 0) }, // Alternates corners
-    hoop: { position: new THREE.Vector3(side * 9, 6, 0), target: new THREE.Vector3(side * 13.4, 3, 0) } // Alternates hoops
+    side: { position: new THREE.Vector3(side * 23, 8, 0), target: new THREE.Vector3(0, 0, 0) },
+    corner: { position: new THREE.Vector3(side * 18, 10, 18), target: new THREE.Vector3(0, 0, 0) },
+    hoop: { position: new THREE.Vector3(side * 9, 6, 0), target: new THREE.Vector3(side * 13.4, 3, 0) }
   };
 }
 
@@ -727,15 +708,12 @@ function getCameraPresets(side = currentSide) {
 function setCameraPreset(presetName, duration = 1000) {
   // Toggle side for side, corner, and hoop views
   if (presetName === 'side' || presetName === 'corner' || presetName === 'hoop') {
-    currentSide = currentSide * -1; // Alternate between 1 and -1
-    console.log(`Switched to side: ${currentSide}`); // Debug log
+    currentSide = currentSide * -1;
   }
   
   const cameraPresets = getCameraPresets(currentSide);
   const preset = cameraPresets[presetName];
   if (!preset) return;
-  
-  console.log(`Camera preset ${presetName} position:`, preset.position); // Debug log
   
   const startPos = camera.position.clone();
   const startTarget = controls.target.clone();
@@ -760,12 +738,10 @@ function setCameraPreset(presetName, duration = 1000) {
   updateCamera();
 }
 
-// =================
-// ANIMATION LOOP
-// =================
+// Animation loop
 let lastTime = 0;
 let orbitEnabled = true;
-let currentSide = 1; // Track which side the camera should show (1 or -1)
+  let currentSide = 1;
 
 function animate(currentTime) {
   requestAnimationFrame(animate);
