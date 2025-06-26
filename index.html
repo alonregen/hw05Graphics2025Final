@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Basketball Court - HW5</title>
+		<title>Interactive Basketball Shooting Game - HW6</title>
 		<style>
 			body { 
 				margin: 0; 
@@ -24,26 +24,27 @@
 			
 			.side-container {
 				position: fixed;
-				background-color: rgba(0, 0, 0, 0.7);
+				background-color: rgba(0, 0, 0, 0.8);
 				color: white;
 				padding: 20px;
 				border-radius: 10px;
 				backdrop-filter: blur(5px);
 				pointer-events: auto;
+				border: 2px solid #ff8c00;
 			}
 			
 			.side-container.left {
 				left: 20px;
 				top: 50%;
 				transform: translateY(-50%);
-				max-width: 250px;
+				max-width: 280px;
 			}
 			
 			.side-container.right {
 				right: 20px;
 				top: 50%;
 				transform: translateY(-50%);
-				max-width: 250px;
+				max-width: 280px;
 			}
 			
 			.controls-title {
@@ -52,36 +53,53 @@
 				margin-bottom: 15px;
 				border-bottom: 2px solid #ff8c00;
 				padding-bottom: 5px;
+				text-align: center;
 			}
 			
 			.control-item {
 				margin: 10px 0;
 				font-size: 16px;
+				display: flex;
+				align-items: center;
 			}
 			
 			.key {
 				background-color: #ff8c00;
 				color: black;
-				padding: 2px 8px;
+				padding: 4px 8px;
 				border-radius: 4px;
-				margin-right: 8px;
+				margin-right: 10px;
+				font-weight: bold;
+				min-width: 60px;
+				text-align: center;
+			}
+			
+			.control-section {
+				margin-bottom: 20px;
+				padding-bottom: 15px;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+			}
+			
+			.control-section:last-child {
+				border-bottom: none;
+				margin-bottom: 0;
+				padding-bottom: 0;
+			}
+			
+			.section-title {
+				color: #ff8c00;
+				font-size: 18px;
+				margin-bottom: 10px;
 				font-weight: bold;
 			}
 			
-			.future-controls {
-				margin-top: 20px;
-				padding-top: 10px;
-				border-top: 1px solid rgba(255, 255, 255, 0.2);
-				color: #888;
-				font-style: italic;
-			}
-			
 			.score-display {
-				font-size: 24px;
+				font-size: 32px;
 				font-weight: bold;
 				margin-bottom: 15px;
 				text-align: center;
 				color: #ff8c00;
+				text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 			}
 			
 			.time-display {
@@ -100,27 +118,12 @@
 				margin-right: 5px;
 			}
 			
-			.future-control {
-				color: #999;
-				font-style: italic;
-				padding-left: 20px;
-				position: relative;
-				opacity: 0.8;
-			}
-			
-			.future-control::before {
-				content: "→";
-				position: absolute;
-				left: 0;
-				color: #ff8c00;
-				opacity: 0.6;
-			}
-			
 			.status-item {
 				margin: 12px 0;
-				padding: 8px;
-				background: rgba(255, 255, 255, 0.05);
+				padding: 10px;
+				background: rgba(255, 255, 255, 0.1);
 				border-radius: 6px;
+				border-left: 4px solid #ff8c00;
 			}
 			
 			.status-label {
@@ -128,49 +131,110 @@
 				font-weight: bold;
 				margin-right: 8px;
 			}
+			
+			.power-indicator {
+				font-family: monospace;
+				font-size: 14px;
+				color: #4CAF50;
+			}
+			
+			.game-instructions {
+				background: rgba(255, 140, 0, 0.1);
+				padding: 15px;
+				border-radius: 8px;
+				margin-top: 15px;
+				border: 1px solid rgba(255, 140, 0, 0.3);
+			}
+			
+			.instruction-text {
+				font-size: 14px;
+				color: #ccc;
+				line-height: 1.4;
+			}
 		</style>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'></script>
 	</head>
 	<body>
 		<div class="ui-container">
 			<div class="side-container left">
-				<div class="controls-title">Controls</div>
-				<div class="control-item">
-					<span class="key">O</span>Toggle orbit camera
+				<div class="controls-title">🏀 Game Controls</div>
+				
+				<div class="control-section">
+					<div class="section-title">Basketball Movement</div>
+					<div class="control-item">
+						<span class="key">↑↓←→</span>Move basketball (camera-relative)
+					</div>
+					<div class="control-item">
+						<span class="key">W / S</span>Adjust shot power
+					</div>
+					<div class="control-item">
+						<span class="key">SPACE</span>Shoot basketball
+					</div>
+					<div class="control-item">
+						<span class="key">R</span>Reset ball position
+					</div>
 				</div>
-				<div class="control-item">
-					<span class="key">1</span>Default view
+				
+				<div class="control-section">
+					<div class="section-title">Camera Controls</div>
+					<div class="control-item">
+						<span class="key">O</span>Toggle orbit camera
+					</div>
+					<div class="control-item">
+						<span class="key">1</span>Default view
+					</div>
+					<div class="control-item">
+						<span class="key">2</span>Side view (alternates)
+					</div>
+					<div class="control-item">
+						<span class="key">3</span>Corner view (alternates)
+					</div>
+					<div class="control-item">
+						<span class="key">4</span>Hoop view (alternates)
+					</div>
 				</div>
-				<div class="control-item">
-					<span class="key">2</span>Side view
-				</div>
-				<div class="control-item">
-					<span class="key">3</span>Corner view
-				</div>
-				<div class="control-item">
-					<span class="key">4</span>Close hoop view
-				</div>
-				<div class="future-controls">
-					<div class="controls-title">Coming in HW06</div>
-					<div class="control-item">↑↓←→ Move basketball</div>
-					<div class="control-item">W/S Adjust height</div>
-					<div class="control-item">Space Shoot ball</div>
-					<div class="control-item">R Reset ball</div>
+				
+				<div class="game-instructions">
+					<div class="instruction-text">
+						<strong>How to Play:</strong><br>
+						• Use arrow keys to move the basketball (relative to camera view)<br>
+						• Press W/S to adjust your shot power (0-100%)<br>
+						• Hit SPACE to shoot toward the nearest hoop<br>
+						• Score 2 points for each successful shot<br>
+						• Press R to reset the ball to center court<br>
+						• <strong>Tip:</strong> Movement follows camera perspective for intuitive control
+					</div>
 				</div>
 			</div>
 			
 			<div class="side-container right">
-				<div class="controls-title">Game Status</div>
-				<div class="score-display">Score: 0 - 0</div>
-				<div class="time-display" id="time-display">Time: 00:00</div>
+				<div class="controls-title">🏆 Game Stats</div>
+				<div class="score-display">Score: 0</div>
+				
 				<div class="status-item" id="game-status">
-					<span class="status-label">Game:</span>Ready
+					<span class="status-label">Shots:</span>0/0 (0%)
 				</div>
+				
 				<div class="status-item" id="ball-position">
-					<span class="status-label">Ball:</span>Center Court
+					<span class="status-label">Power:</span>50% [█████░░░░░]
 				</div>
+				
 				<div class="status-item" id="camera-status">
 					<span class="status-label">Camera:</span>Orbit Enabled
+				</div>
+				
+				<div class="game-instructions">
+					<div class="instruction-text">
+						<strong>Scoring System:</strong><br>
+						• Each successful shot = 2 points<br>
+						• Accuracy percentage tracked<br>
+						• Real-time feedback for shots<br>
+						• Ball must pass through hoop center<br>
+						• Physics-based trajectory required<br><br>
+						<strong>Camera Tips:</strong><br>
+						• Press O to toggle orbit control<br>
+						• Views 2,3,4 alternate sides each press
+					</div>
 				</div>
 			</div>
 		</div>
