@@ -43,8 +43,7 @@ A fully interactive 3D basketball shooting game with realistic physics, scoring 
 *Missed shot feedback message*
 
 ### Gameplay Video
-![Gameplay Demo](https://user-images.githubusercontent.com/alonregen/hw05Graphics2025Final/main/screenshots/gameplay_demo.mp4)
-*Complete gameplay demonstration*
+https://github.com/user-attachments/assets/714a2d97-718d-42ec-8c2b-05d07e5b3ca2
 
 ## Main Features
 
