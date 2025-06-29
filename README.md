@@ -13,6 +13,39 @@ A fully interactive 3D basketball shooting game with realistic physics, scoring 
 3. Open your browser to `http://localhost:8000`
 4. Use the controls shown in the left panel to play!
 
+## Screenshots
+
+### Court Views
+![Default Court View](screenshots/court_defualt_look.png)
+*Default basketball court overview*
+
+![Side View](screenshots/side_view.png)
+*Side perspective showing court dimensions*
+
+![Corner View](screenshots/corner_view.png)
+*Angled corner view of the court*
+
+![Free Orbit Top View](screenshots/free_orbit_top_view.png)
+*Top-down view of the entire court*
+
+### Basketball and Hoops
+![Ball at Center](screenshots/ball_at_center.png)
+*Basketball positioned at center court*
+
+![Close Hoop View](screenshots/close_hoop_view.png)
+*Close-up view of basketball hoop*
+
+### Gameplay Features
+![Shot Made Feedback](screenshots/shot_made.png)
+*Successful shot feedback message*
+
+![Missed Shot Feedback](screenshots/missed_shot.png)
+*Missed shot feedback message*
+
+### Gameplay Video
+![Gameplay Demo](screenshots/gameplay_demo.mp4)
+*Complete gameplay demonstration*
+
 ## Main Features
 
 ### Basketball Controls
@@ -110,39 +143,6 @@ A fully interactive 3D basketball shooting game with realistic physics, scoring 
 - **Power-Based Shooting**: Shot strength affects trajectory and distance
 - **Boundary Protection**: Ball stays within court boundaries
 - **Professional UI**: Real-time statistics and control instructions
-
-## Screenshots
-
-### Court Views
-![Default Court View](screenshots/court_defualt_look.png)
-*Default basketball court overview*
-
-![Side View](screenshots/side_view.png)
-*Side perspective showing court dimensions*
-
-![Corner View](screenshots/corner_view.png)
-*Angled corner view of the court*
-
-![Free Orbit Top View](screenshots/free_orbit_top_view.png)
-*Top-down view of the entire court*
-
-### Basketball and Hoops
-![Ball at Center](screenshots/ball_at_center.png)
-*Basketball positioned at center court*
-
-![Close Hoop View](screenshots/close_hoop_view.png)
-*Close-up view of basketball hoop*
-
-### Gameplay Features
-![Shot Made Feedback](screenshots/shot_made_feedback.png)
-*Successful shot feedback message*
-
-![Missed Shot Feedback](screenshots/missed_shot_feedback.png)
-*Missed shot feedback message*
-
-### Gameplay Video
-![Gameplay Demo](screenshots/gameplay_demo.mp4)
-*Complete gameplay demonstration*
 
 ## Development 
 - Physics-based basketball movement with realistic gravity
